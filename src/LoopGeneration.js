@@ -1,4 +1,5 @@
 import React from 'react'
+import { InputGroup, InputLeftAddon, InputRightAddon, Button, Input } from '@chakra-ui/react';
 import InfiniteProgressBar from './InfiniteProgressBar'
 
 class LoopGeneration extends React.Component {
@@ -46,15 +47,18 @@ class LoopGeneration extends React.Component {
 
     render() { 
         return ( 
-            <div className='LoopGeneration'>
-                <input type='number' step='0.1' value={this.state.interval===0 ? '' : this.state.interval/1000} onChange={this.handleChangeInterval}></input>
-                <button onClick={this.handleToggleLoop}>{this.state.loop ? "Stop loop" : "Star loop"}</button>
-                {this.state.loop && (this.state.showProgress && <InfiniteProgressBar duration={this.state.interval}/>)}
-            </div>
+            <>
+              <InputGroup maxW='15rem'>
+                <InputLeftAddon p='0'>
+                  <Button onClick={this.handleToggleLoop}>{this.state.loop ? "Stop loop" : "Star loop"}</Button>
+                </InputLeftAddon>
+                <Input type='number' step='0.1' value={this.state.interval===0 ? '' : this.state.interval/1000} onChange={this.handleChangeInterval}></Input>
+                <InputRightAddon children='sec' bgColor='white'/>
+              </InputGroup>
+              {this.state.loop && (this.state.showProgress && <InfiniteProgressBar duration={this.state.interval}/>)}
+            </>
         );
     }
 }
-
-//animation: progress 3s infinite linear;
  
 export default LoopGeneration;

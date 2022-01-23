@@ -1,0 +1,11 @@
+<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="plus">
+<rect width="14" height="14" fill="white"/>
+<g id="vertical">
+<path id="Vector 2" d="M6 14V0H8V14H6Z" fill="black"/>
+</g>
+<g id="horizontal">
+<path id="Vector 1" d="M14 8V6H0V8H14Z" fill="black"/>
+</g>
+</g>
+</svg>

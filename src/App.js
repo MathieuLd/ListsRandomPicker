@@ -1,7 +1,10 @@
 import React from 'react';
+import { Container, Flex, Heading } from '@chakra-ui/react';
 import './App.css';
-import ResultContainer from './ResultContainer';
 import TextAreaList from './TextAreaList';
+import GenerationTriggerer from './GenerationTriggerer';
+import Result from './Result';
+
 
 
 class App extends React.Component{
@@ -11,15 +14,9 @@ class App extends React.Component{
     this.handelChangeList = this.handelChangeList.bind(this)
     this.handleAddList = this.handleAddList.bind(this)
     this.handleDeleteList = this.handleDeleteList.bind(this)
-    this.handleLoopStart = this.handleLoopStart.bind(this)
-    this.handleLoopStop = this.handleLoopStop.bind(this)
-    this.handleIntervalUnfocus = this.handleIntervalUnfocus.bind(this)
-    let intervalUrl = this.getIntervalFromUrl()
     this.state = {
       lists: this.getListsFromUrl(),
       result: "",
-      loop: !(intervalUrl == null),
-      interval: (intervalUrl == null ? 2000 : intervalUrl)
     }
   }
 
@@ -33,10 +30,6 @@ class App extends React.Component{
     let listsEncoded = new URLSearchParams(window.location.search).get("listsEncoded")
     let listsDecoded = window.atob(listsEncoded)
     return (this.IsJsonString(listsDecoded) ?  JSON.parse(listsDecoded) : [""])
-  }
-
-  getIntervalFromUrl(){
-    return new URLSearchParams(window.location.search).get("interval");
   }
 
   IsJsonString(str) {
@@ -100,54 +93,33 @@ class App extends React.Component{
     if(!this.urlCorrespondToState()){window.location.replace(this.stateToUrl())}
   }
 
-  handleLoopStart(intervalMs){
-    this.setState((state) => {
-      return {
-        loop: true,
-        interval: intervalMs
-      }
-    }, () => {this.redirectIfNeeded()})
-  }
-
-  handleLoopStop(){
-    this.setState((state) => {
-      return {
-        loop: false,
-        interval: null
-      }
-    }, () => {this.redirectIfNeeded()})
-  }
-
-  handleIntervalUnfocus(intervalMs){
-    this.setState((state) => {
-      return {interval: intervalMs}
-    },() => {if(this.state.loop) this.handleGeneration()})
-  }
 
   stateToUrl(){
     //TODO remove condition list == 0 by making sure deleting last list only delete its content
     console.log("stateToUrl / state.loop ",this.state.loop)
     let listsToEncode = this.removeEmptyLists(this.state.lists)
-    return window.location.href.split("/?")[0] + "?listsEncoded=" + window.btoa(JSON.stringify((listsToEncode.length === 0 ? [""] : listsToEncode))) + (this.state.loop ? ("&interval=" + this.state.interval) : "")
+    //console.log(window.location.href.split("/?")[0] + "?listsEncoded=" + window.btoa(JSON.stringify((listsToEncode.length === 0 ? [""] : listsToEncode))) + (this.state.loop ? ("&interval=" + this.state.interval) : ""))
+    return window.location.href.split("?listsEncoded")[0] + "?listsEncoded=" + window.btoa(JSON.stringify((listsToEncode.length === 0 ? [""] : listsToEncode))) + (this.state.loop ? ("&interval=" + this.state.interval) : "")
   }
 
   urlCorrespondToState(){
     let listsEquality = this.areArrayEqual(this.getListsFromUrl(), this.state.lists)
-    let intervalEquality = (this.getIntervalFromUrl() === null && this.state.loop === false) || (this.state.loop === true && this.getIntervalFromUrl() === this.state.interval)
-    return listsEquality && intervalEquality
+    return listsEquality
   }
 
 
   render(){
     return (
-      <div className="App">
-        <h1>Lists random picker</h1>
-        <TextAreaList list={this.state.lists} onChangeList={this.handelChangeList} onAddList={this.handleAddList} onDeleteList={this.handleDeleteList} />
-        <ResultContainer result={this.state.result} onGenerate={this.handleGeneration} onLoopStart={this.handleLoopStart} onLoopStop={this.handleLoopStop} onIntervalUnfocus={this.handleIntervalUnfocus} loop={this.state.loop} interval={this.state.interval}/>
-      </div>
+        <Container maxW='1500px' h='100vh' >
+            <Flex w='100%' h='100%' direction='column' p='1rem' gap='1rem'>
+              <Heading mb='0.5rem'>Lists random picker</Heading>
+              <TextAreaList list={this.state.lists} onChangeList={this.handelChangeList} onAddList={this.handleAddList} onDeleteList={this.handleDeleteList} />
+              <GenerationTriggerer onGenerate={this.handleGeneration}/>
+              <Result result={this.state.result}/>
+            </Flex>
+        </Container>
     );
   }
-
 }
 
 export default App;

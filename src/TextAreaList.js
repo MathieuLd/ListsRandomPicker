@@ -1,5 +1,7 @@
 import React from "react";
+import { Flex, IconButton } from '@chakra-ui/react';
 import TextAreaElem from "./TextAreaElem";
+import {AddIcon} from "./assets/icons.js"
 
 class TextAreaList extends React.Component {
     constructor(props){
@@ -27,10 +29,10 @@ class TextAreaList extends React.Component {
         const textAreaElems = this.props.list.map((listText, index) => {return(<TextAreaElem key={index} index={index} text={listText} onDeleteList={this.handleDeleteList} onChangeList={this.handelChangeList} />)})
 
         return ( 
-            <div className="TextAreaListe">
+            <Flex direction='row' minH='15rem' overflowX='auto' gap='0.5rem' p='3px'>
                 {textAreaElems}
-                <button onClick={this.handleAddList}>Add list</button>
-            </div>
+                <IconButton className="addButton" onClick={this.handleAddList} h="100%" icon={<AddIcon boxSize="1.5rem"/>}></IconButton>
+            </Flex>
         );
     }
 }
