@@ -1,6 +1,7 @@
 import React from 'react'
-import { InputGroup, InputLeftAddon, InputRightAddon, Button, Input } from '@chakra-ui/react';
+import { InputGroup, InputLeftAddon, InputRightAddon, Button, Input, IconButton } from '@chakra-ui/react';
 import InfiniteProgressBar from './InfiniteProgressBar'
+import { LoopIcon } from "./assets/icons.js"
 
 class LoopGeneration extends React.Component {
     constructor(props) {
@@ -50,7 +51,7 @@ class LoopGeneration extends React.Component {
             <>
               <InputGroup maxW='15rem'>
                 <InputLeftAddon p='0'>
-                  <Button onClick={this.handleToggleLoop}>{this.state.loop ? "Stop loop" : "Star loop"}</Button>
+                  <IconButton className={ this.state.loop ? "loopButtonOn" : "loopButtonOff" } onClick={this.handleToggleLoop} icon={<LoopIcon boxSize="1.5rem"/>}/>
                 </InputLeftAddon>
                 <Input type='number' step='0.1' value={this.state.interval===0 ? '' : this.state.interval/1000} onChange={this.handleChangeInterval}></Input>
                 <InputRightAddon children='sec' bgColor='white'/>

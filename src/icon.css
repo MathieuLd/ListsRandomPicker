@@ -1,34 +1,92 @@
-#lid{
-    transition: all 0.3s ease;
-}
+/* Loop Bin */
 
-#container{
-    transition: all 0.3s ease;
+#lid, #container{
+  transition: all 0.3s ease;
 }
 
 .deleteButton:hover #lid{
-    transform: translate(0.2rem,-0.3rem) rotate(15deg);
+  transform: translate(0.2rem,-0.3rem) rotate(15deg);
 }
 
 .deleteButton:hover #container{
-    transform: translate(-0.1rem,0.15rem) rotate(-7deg);
+  transform: translate(-0.1rem,0.15rem) rotate(-7deg);
 }
 
+
+
+/* Loop Plus */
+
+#horizontal, #vertical{
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
 
 #horizontal{
-    transition: all 0.3s ease;
-    transform-origin: center;
-}
-
-#vertical{
-    transition: all 0.3s ease;
-    transform-origin: center;
+  transition: all 0.3s ease;
+  /* transform-origin: 100% 50%; */
 }
 
 .addButton:hover #horizontal{
-    transform: rotate(-225deg);
+  transform: translate(0, 0) rotate(-33deg);
+
+}
+
+
+
+.addButton:hover #horizontal{
+  transform: translate(0, 24%) rotate(-210deg);
 }
 
 .addButton:hover #vertical{
-    transform: rotate(135deg);
+  transform: translate(0, -24%) rotate(120deg);
+}
+
+
+
+/* Loop Icon */
+
+
+.loopButtonOff #arcBottom, .loopButtonOff #arrowBottom, .loopButtonOff #arcTop, .loopButtonOff #arrowTop{
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.loopButtonOff #arcBottom{
+  transform: rotate(-90deg);
+}
+
+.loopButtonOff #arrowBottom, .loopButtonOff #arcTop{
+  transform: rotate(-180deg);
+}
+
+.loopButtonOff #arrowTop{
+  transform: rotate(0deg);
+}
+
+.loopButtonOff:hover #arcBottom, .loopButtonOff:hover #arrowBottom, .loopButtonOff:hover #arcTop, .loopButtonOff:hover #arrowTop{
+  transform: rotate(-360deg);
+}
+
+
+
+.loopButtonOn #arcBottom, .loopButtonOn #arrowBottom, .loopButtonOn #arcTop, .loopButtonOn #arrowTop{
+  transition: all 0.3s ease;
+  transform-origin: center;
+  transform: rotate(-360deg);
+}
+
+.loopButtonOn:hover #arcBottom{
+  transform: rotate(10deg) translate(0%, -40%);;
+}
+
+.loopButtonOn:hover #arrowBottom{
+  transform: rotate(10deg) translate(0%, -40%);
+}
+
+.loopButtonOn:hover #arcTop{
+  transform: rotate(10deg) translate(0%, 40%);;
+}
+
+.loopButtonOn:hover #arrowTop{
+  transform: rotate(10deg) translate(0%, 40%);
 }

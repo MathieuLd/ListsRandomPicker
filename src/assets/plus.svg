@@ -1,11 +1,11 @@
-<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="15" height="17" viewBox="0 0 15 17" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="plus">
-<rect width="14" height="14" fill="white"/>
+<rect width="15" height="17" fill="white"/>
 <g id="vertical">
-<path id="Vector 2" d="M6 14V0H8V14H6Z" fill="black"/>
+<path id="Vector 2" d="M6.5 14.9615V2.03846C6.5 0.653846 8.5 0.653846 8.5 2.03846V14.9615C8.5 16.3462 6.5 16.3462 6.5 14.9615Z" fill="black"/>
 </g>
 <g id="horizontal">
-<path id="Vector 1" d="M14 8V6H0V8H14Z" fill="black"/>
+<path id="Vector 1" d="M13.9615 10C15.3462 10 15.3462 8 13.9615 8C12.5769 8 2.42308 8 1.03846 8C-0.346155 8 -0.346154 10 1.03846 10C2.42308 10 12.5769 10 13.9615 10Z" fill="black"/>
 </g>
 </g>
 </svg>

@@ -6,10 +6,6 @@ class Result extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
-    const loopContext = this.context
-  }
-
   render() { 
     return ( 
       <Flex w='100%' h='100vh' direction='column' align='center' justify='center' mb='10vh'>

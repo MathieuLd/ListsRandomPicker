@@ -26,7 +26,7 @@ class TextAreaList extends React.Component {
 
 
     render() { 
-        const textAreaElems = this.props.list.map((listText, index) => {return(<TextAreaElem key={index} index={index} text={listText} onDeleteList={this.handleDeleteList} onChangeList={this.handelChangeList} />)})
+        const textAreaElems = this.props.list.map((listText, index) => {return(<TextAreaElem key={index} index={index} listNumber={this.props.list.length} text={listText} onDeleteList={this.handleDeleteList} onChangeList={this.handelChangeList} />)})
 
         return ( 
             <Flex direction='row' minH='15rem' overflowX='auto' gap='0.5rem' p='3px'>
