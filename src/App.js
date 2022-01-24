@@ -22,7 +22,7 @@ class App extends React.Component{
 
   componentDidMount() {
     this.generateResult()
-    console.log(this.state)
+    //console.log(this.state)
     if(this.state.loop){window.setInterval(() => {this.generateResult()},this.state.interval)}
   }
 
@@ -50,13 +50,13 @@ class App extends React.Component{
   }
 
   generateResult(){
-    console.log('this.generateResult')
+   // console.log('this.generateResult')
     this.setState((state) => {
       return {result: state.lists.map((list) => {
         let elems = list.split("\n")
         return elems[this.randomInt(elems.length)]
       }).join("-")}
-    }, () => {console.log(this.state)})
+    }, () => {/*console.log(this.state)*/})
   }
 
 

@@ -34,11 +34,11 @@
 
 
 .addButton:hover #horizontal{
-  transform: translate(0, 24%) rotate(-210deg);
+  transform: translateY(24%) rotate(-210deg);
 }
 
 .addButton:hover #vertical{
-  transform: translate(0, -24%) rotate(120deg);
+  transform: translateY(-24%) rotate(120deg);
 }
 
 
@@ -46,47 +46,42 @@
 /* Loop Icon */
 
 
-.loopButtonOff #arcBottom, .loopButtonOff #arrowBottom, .loopButtonOff #arcTop, .loopButtonOff #arrowTop{
+.loopButton #arcBottom,  .loopButton #arrowBottom, .loopButton #arcTop, .loopButton #arrowTop{
   transition: all 0.3s ease;
   transform-origin: center;
 }
 
-.loopButtonOff #arcBottom{
+
+.oneArrowLoop #arcBottom{
   transform: rotate(-90deg);
 }
 
-.loopButtonOff #arrowBottom, .loopButtonOff #arcTop{
+.oneArrowLoop #arrowBottom, .oneArrowLoop #arcTop{
   transform: rotate(-180deg);
 }
 
-.loopButtonOff #arrowTop{
+.oneArrowLoop #arrowTop{
   transform: rotate(0deg);
 }
 
-.loopButtonOff:hover #arcBottom, .loopButtonOff:hover #arrowBottom, .loopButtonOff:hover #arcTop, .loopButtonOff:hover #arrowTop{
+
+.twoArrowLoop #arcBottom, .twoArrowLoop #arrowBottom, .twoArrowLoop #arcTop, .twoArrowLoop #arrowTop{
   transform: rotate(-360deg);
 }
 
 
-
-.loopButtonOn #arcBottom, .loopButtonOn #arrowBottom, .loopButtonOn #arcTop, .loopButtonOn #arrowTop{
-  transition: all 0.3s ease;
-  transform-origin: center;
-  transform: rotate(-360deg);
-}
-
-.loopButtonOn:hover #arcBottom{
+.twoArrowOut #arcBottom{
   transform: rotate(10deg) translate(0%, -40%);;
 }
 
-.loopButtonOn:hover #arrowBottom{
+.twoArrowOut #arrowBottom{
   transform: rotate(10deg) translate(0%, -40%);
 }
 
-.loopButtonOn:hover #arcTop{
+.twoArrowOut #arcTop{
   transform: rotate(10deg) translate(0%, 40%);;
 }
 
-.loopButtonOn:hover #arrowTop{
+.twoArrowOut #arrowTop{
   transform: rotate(10deg) translate(0%, 40%);
 }
