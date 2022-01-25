@@ -54,6 +54,9 @@ class App extends React.Component{
     this.setState((state) => {
       return {result: state.lists.map((list) => {
         let elems = list.split("\n")
+        console.log(elems)
+        elems = elems.map((elem) => {let elemSplit = elem.split("/"); console.log(elemSplit); return elemSplit[this.randomInt(elemSplit.length)]})
+        console.log(elems)
         return elems[this.randomInt(elems.length)]
       }).join("-")}
     }, () => {/*console.log(this.state)*/})
