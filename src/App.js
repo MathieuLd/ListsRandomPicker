@@ -36,7 +36,7 @@ function App(){
         let elems = list.split("\n")
         elems = elems.map((elem) => {let elemSplit = elem.split("/"); return elemSplit[randomInt(elemSplit.length)]})
         return elems[randomInt(elems.length)]
-      }).join("-")
+      }).join(" - ")
     )
   }
 
