@@ -1,128 +1,83 @@
-import React from 'react';
-import { Container, Flex, Heading } from '@chakra-ui/react';
-import './App.css';
+import React, { useState, useEffect} from 'react';
+import { Container, Flex } from '@chakra-ui/react';
+import Header from './Header';
 import TextAreaList from './TextAreaList';
 import GenerationTriggerer from './GenerationTriggerer';
 import Result from './Result';
+import './App.css';
+import './icon.css';
 
 
+function App(){
 
-class App extends React.Component{
-  constructor(props){
-    super(props)
-    this.handleGeneration = this.handleGeneration.bind(this)
-    this.handelChangeList = this.handelChangeList.bind(this)
-    this.handleAddList = this.handleAddList.bind(this)
-    this.handleDeleteList = this.handleDeleteList.bind(this)
-    this.state = {
-      lists: this.getListsFromUrl(),
-      result: "",
-    }
-  }
-
-  componentDidMount() {
-    this.generateResult()
-    //console.log(this.state)
-    if(this.state.loop){window.setInterval(() => {this.generateResult()},this.state.interval)}
-  }
-
-  getListsFromUrl(){
-    let listsEncoded = new URLSearchParams(window.location.search).get("listsEncoded")
-    let listsDecoded = window.atob(listsEncoded)
-    return (this.IsJsonString(listsDecoded) ?  JSON.parse(listsDecoded) : [""])
-  }
-
-  IsJsonString(str) {
-    try {
-        JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
+  const isJsonString = (str) => {
+    try {JSON.parse(str);} catch (e) {return false;}
     return true;
   }
 
-  randomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
-  
-  removeEmptyLists(array){
-    return(array.filter(elem => elem !== ""))
+  const getListsFromUrl = () => {
+    let listsEncoded = new URLSearchParams(window.location.search).get("listsEncoded")
+    let listsDecoded = window.atob(listsEncoded)
+    return (isJsonString(listsDecoded) ?  JSON.parse(listsDecoded) : [""])
   }
 
-  generateResult(){
-   // console.log('this.generateResult')
-    this.setState((state) => {
-      return {result: state.lists.map((list) => {
+  const [lists, setLists] = useState(getListsFromUrl());
+  const [result, setResult] = useState("");
+
+  useEffect(() => generateResult(),[])
+
+  const randomInt = (max) => Math.floor(Math.random() * max);
+
+  const removeEmptyLists = (array) => array.filter(elem => elem !== "")
+
+  const generateResult = () => {
+    setResult(
+      lists.map((list) => {
         let elems = list.split("\n")
-        console.log(elems)
-        elems = elems.map((elem) => {let elemSplit = elem.split("/"); console.log(elemSplit); return elemSplit[this.randomInt(elemSplit.length)]})
-        console.log(elems)
-        return elems[this.randomInt(elems.length)]
-      }).join("-")}
-    }, () => {/*console.log(this.state)*/})
+        elems = elems.map((elem) => {let elemSplit = elem.split("/"); return elemSplit[randomInt(elemSplit.length)]})
+        return elems[randomInt(elems.length)]
+      }).join("-")
+    )
   }
 
-
-  handelChangeList(index, listText){
-    this.setState((state) => {
-      return {lists: state.lists.map((list,id) => {
-        return (id === index ? listText : list)
-      })}
-    })
+  const handelChangeList = (index, listStr) => {
+    setLists((pervLists) => pervLists.map((prevListStr,id) => {
+      return id === index ? listStr : prevListStr
+    }))
   }
 
-  handleAddList(){
-    this.setState((state) => {
-      return {lists:[ ...state.lists,""]}
-    })
+  const handleAddList = () => setLists(prevLists => [...prevLists,""])
+
+  const handleDeleteList = (index) => setLists(prevLists => prevLists.filter((list,id) => index !== id))
+
+  const areArrayEqual = (a,b) => JSON.stringify(a) === JSON.stringify(b);
+
+  const handleGeneration = () => {
+    redirectIfNeeded()
+    generateResult()
   }
 
-  handleDeleteList(index){
-    this.setState((state) => {
-      return {lists: state.lists.filter((list,id) => {return index !== id})}
-    })
+  const redirectIfNeeded = () => {if(!urlCorrespondToState()) window.location.replace(stateToUrl())}
+
+  const stateToUrl = () => {
+    let listsToEncode = removeEmptyLists(lists)
+    return window.location.href.split("?listsEncoded")[0] + "?listsEncoded=" + window.btoa(JSON.stringify((listsToEncode.length === 0 ? [""] : listsToEncode)))
   }
 
-  areArrayEqual(a,b){
-    return JSON.stringify(a) === JSON.stringify(b)
-  }
+  const urlCorrespondToState = () => areArrayEqual(getListsFromUrl(), lists)
 
-  handleGeneration(){
-    this.redirectIfNeeded()
-    this.generateResult()
-  }
-
-  redirectIfNeeded(){
-    if(!this.urlCorrespondToState()){window.location.replace(this.stateToUrl())}
-  }
-
-
-  stateToUrl(){
-    //TODO remove condition list == 0 by making sure deleting last list only delete its content
-    console.log("stateToUrl / state.loop ",this.state.loop)
-    let listsToEncode = this.removeEmptyLists(this.state.lists)
-    //console.log(window.location.href.split("/?")[0] + "?listsEncoded=" + window.btoa(JSON.stringify((listsToEncode.length === 0 ? [""] : listsToEncode))) + (this.state.loop ? ("&interval=" + this.state.interval) : ""))
-    return window.location.href.split("?listsEncoded")[0] + "?listsEncoded=" + window.btoa(JSON.stringify((listsToEncode.length === 0 ? [""] : listsToEncode))) + (this.state.loop ? ("&interval=" + this.state.interval) : "")
-  }
-
-  urlCorrespondToState(){
-    let listsEquality = this.areArrayEqual(this.getListsFromUrl(), this.state.lists)
-    return listsEquality
-  }
+  return (
+    <Container maxW='1500px' h='100vh' >
+        <Flex w='100%' h='100%' direction='column' p='1rem' gap='1rem'>
+          <Header/>
+          <TextAreaList list={lists} onChangeList={handelChangeList} onAddList={handleAddList} onDeleteList={handleDeleteList} />
+          <GenerationTriggerer onGenerate={handleGeneration}/>
+          <Result result={result}/>
+        </Flex>
+    </Container>
+  );
 
 
-  render(){
-    return (
-        <Container maxW='1500px' h='100vh' >
-            <Flex w='100%' h='100%' direction='column' p='1rem' gap='1rem'>
-              <Heading mb='0.5rem'>Lists random picker</Heading>
-              <TextAreaList list={this.state.lists} onChangeList={this.handelChangeList} onAddList={this.handleAddList} onDeleteList={this.handleDeleteList} />
-              <GenerationTriggerer onGenerate={this.handleGeneration}/>
-              <Result result={this.state.result}/>
-            </Flex>
-        </Container>
-    );
-  }
 }
 
 export default App;
