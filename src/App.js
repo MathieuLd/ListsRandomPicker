@@ -70,13 +70,12 @@ function App(){
     <Container maxW='1500px' h='100vh' >
         <Flex w='100%' h='100%' direction='column' p='1rem' gap='1rem'>
           <Header/>
-          <TextAreaList list={lists} onChangeList={handelChangeList} onAddList={handleAddList} onDeleteList={handleDeleteList} />
+          <TextAreaList lists={lists} onChangeList={handelChangeList} onAddList={handleAddList} onDeleteList={handleDeleteList} />
           <GenerationTriggerer onGenerate={handleGeneration}/>
           <Result result={result}/>
         </Flex>
     </Container>
   );
-
 
 }
 

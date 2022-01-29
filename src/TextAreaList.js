@@ -11,7 +11,7 @@ function TextAreaList(props){
   
   return ( 
     <Flex direction='row' minH='15rem' overflowX='auto' gap='0.5rem' p='3px'>
-      {props.list.map((listStr,index) => <TextAreaElem key={index} index={index} listsNum={props.list.length} text={listStr} onChangeList={handelChangeList} onDeleteList={handleDeleteList} />)}
+      {props.lists.map((listStr,index) => <TextAreaElem key={index} index={index} listsNum={props.lists.length} text={listStr} onChangeList={handelChangeList} onDeleteList={handleDeleteList} />)}
       <IconButton className="addButton" onClick={props.onAddList} h="100%" icon={<AddIcon boxSize="1.5rem"/>}></IconButton>
     </Flex>
   );
