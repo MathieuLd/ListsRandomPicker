@@ -1,87 +1,64 @@
-import React from 'react'
-import { InputGroup, InputLeftAddon, InputRightAddon, Button, Input, IconButton } from '@chakra-ui/react';
-import InfiniteProgressBar from './InfiniteProgressBar'
+import { useState, useEffect } from 'react'
+import { InputGroup, InputLeftAddon, InputRightAddon, Input, IconButton } from '@chakra-ui/react';
 import { LoopIcon } from "./assets/icons.js"
+import InfiniteProgressBar from './InfiniteProgressBar'
 
 
+function LoopGeneration(props){
 
-class LoopGeneration extends React.Component {
+  const iconStates = {
+    default: "oneArrowLoop",
+    running: "twoArrowLoop",
+    stoping: "twoArrowOut"
+  }
 
-    constructor(props) {
-        super(props);
-        this.loopIconState = {
-          default: "oneArrowLoop",
-          running: "twoArrowLoop",
-          stoping: "twoArrowOut"
-        }
-        this.handleChangeInterval = this.handleChangeInterval.bind(this)
-        this.handleToggleLoop = this.handleToggleLoop.bind(this)
-        this.handleHoverLoop = this.handleHoverLoop.bind(this)
-        this.handleUnhoverLoop = this.handleUnhoverLoop.bind(this)
-        this.looper = null
-        this.state = { 
-            interval: 2000,
-            loop: false,
-            showProgress: true,
-            icon: this.loopIconState.default
-        }
+  const [isLooping, setIsLooping] = useState(false);
+  const [interval, setInterval] = useState(2000);
+  const [showProgress, setShowProgress] = useState(true);
+  const [iconState, setIconState] = useState(iconStates.default);
+  const [looperId, setLooperId] = useState(null);
+
+  const handleToggleLoop = () => {setIsLooping(prevIsLooping => !prevIsLooping)}
+  useEffect(() => updateLooper(),[isLooping])
+
+  const handleChangeInterval = (event) => {setInterval(event.target.value * 1000); setShowProgress(false)}
+  useEffect(() => {updateLooper(); setShowProgress(true)},[interval])
+  
+  const handleHoverLoop = () => setIconState((isLooping ? iconStates.stoping : iconStates.running))
+
+  const handleUnhoverLoop = () => setIconState((isLooping ? iconStates.running : iconStates.default))
+  
+
+  const updateLooper = () => {
+    if(isLooping){
+      stopLooper()
+      props.onGenerate()
+      setLooperId(window.setInterval(() => {props.onGenerate()},interval));
+      setIconState(iconStates.running);
+    }else{
+      stopLooper()
+      setIconState(iconStates.default);
     }
+  }
 
-    handleChangeInterval(event){
-        this.setState((state) => {
-            return {
-                interval: event.target.value*1000, 
-                showProgress: false
-            }
-        }, () => {this.updateLooper(); this.setState((state) => {return {showProgress: true}})})
-    }
+  const stopLooper = () => {
+    window.clearInterval(looperId)
+    setLooperId(null);
+  }
 
-    handleToggleLoop(){
-      console.log(this.state)
-        this.setState((state) => {
-            return {loop: !state.loop}
-        }, () => {this.updateLooper()})
-    }
-
-    updateLooper(){
-        if(this.state.loop){
-            this.stopLooper()
-            this.props.onGenerate()
-            this.looper = window.setInterval(() => {this.props.onGenerate()},this.state.interval);
-            this.setState(() => {return {icon: this.loopIconState.running}})
-        }else{
-            this.stopLooper()
-            this.setState(() => {return {icon: this.loopIconState.default}})
-        }
-    }
-
-    stopLooper(){
-        window.clearInterval(this.looper)
-        this.looper = null;
-    }
-
-    handleHoverLoop(){
-      this.setState((state) => {return {icon : (state.loop ? this.loopIconState.stoping : this.loopIconState.running)}})
-    }
-
-    handleUnhoverLoop(){
-      this.setState((state) => {return {icon : (state.loop ? this.loopIconState.running : this.loopIconState.default)}})
-    }
-
-    render() { 
-        return ( 
-            <>
-              <InputGroup maxW='15rem'>
-                <InputLeftAddon p='0'>
-                  <IconButton onClick={this.handleToggleLoop} onMouseEnter={this.handleHoverLoop} onMouseLeave={this.handleUnhoverLoop} className='loopButton' icon={<LoopIcon className={this.state.icon} boxSize="1.5rem"/>}/>
-                </InputLeftAddon>
-                <Input type='number' step='0.1' value={this.state.interval===0 ? '' : this.state.interval/1000} onChange={this.handleChangeInterval}></Input>
-                <InputRightAddon children='sec' bgColor='white'/>
-              </InputGroup>
-              {this.state.loop && (this.state.showProgress && <InfiniteProgressBar duration={this.state.interval}/>)}
-            </>
-        );
-    }
+  return ( 
+    <>
+      <InputGroup maxW='15rem'>
+        <InputLeftAddon p='0'>
+          <IconButton className='loopButton' onClick={handleToggleLoop} onMouseEnter={handleHoverLoop} onMouseLeave={handleUnhoverLoop} icon={<LoopIcon className={iconState} boxSize="1.5rem"/>}/>
+        </InputLeftAddon>
+        <Input type='number' step='0.1' value={interval===0 ? '' : interval/1000} onChange={handleChangeInterval}></Input>
+        <InputRightAddon children='sec' bgColor='white'/>
+      </InputGroup>
+      {isLooping && (showProgress && <InfiniteProgressBar duration={interval}/>)}
+    </>
+  );
 }
- 
+
+
 export default LoopGeneration;
