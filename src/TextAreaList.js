@@ -1,40 +1,21 @@
-import React from "react";
 import { Flex, IconButton } from '@chakra-ui/react';
+import { AddIcon } from "./assets/icons.js"
 import TextAreaElem from "./TextAreaElem";
-import {AddIcon} from "./assets/icons.js"
-
-class TextAreaList extends React.Component {
-    constructor(props){
-        super(props)
-        this.handelChangeList = this.handelChangeList.bind(this)
-        this.handleAddList = this.handleAddList.bind(this)
-        this.handleDeleteList = this.handleDeleteList.bind(this)
-        this.onAddList = props.onAddList
-    }
-
-    handelChangeList(index, listText){
-        this.props.onChangeList(index, listText)
-    }
-
-    handleAddList() {
-        this.props.onAddList()
-    }
-
-    handleDeleteList(index){
-        this.props.onDeleteList(index)
-    }
+import './icon.css'
 
 
-    render() { 
-        const textAreaElems = this.props.list.map((listText, index) => {return(<TextAreaElem key={index} index={index} listNumber={this.props.list.length} text={listText} onDeleteList={this.handleDeleteList} onChangeList={this.handelChangeList}/>)})
-
-        return ( 
-            <Flex direction='row' minH='15rem' overflowX='auto' gap='0.5rem' p='3px'>
-                {textAreaElems}
-                <IconButton className="addButton" onClick={this.handleAddList} h="100%" icon={<AddIcon boxSize="1.5rem"/>}></IconButton>
-            </Flex>
-        );
-    }
+function TextAreaList(props){
+  
+  const handelChangeList = (index,listStr) => props.onChangeList(index,listStr)
+  const handleDeleteList = (index) => props.onDeleteList(index)
+  
+  return ( 
+    <Flex direction='row' minH='15rem' overflowX='auto' gap='0.5rem' p='3px'>
+      {props.list.map((listStr,index) => <TextAreaElem key={index} index={index} listsNum={props.list.length} text={listStr} onChangeList={handelChangeList} onDeleteList={handleDeleteList} />)}
+      <IconButton className="addButton" onClick={props.onAddList} h="100%" icon={<AddIcon boxSize="1.5rem"/>}></IconButton>
+    </Flex>
+  );
 }
  
+
 export default TextAreaList;

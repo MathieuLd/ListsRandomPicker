@@ -1,37 +1,20 @@
-import React from "react";
-import { Box, IconButton, Button, Icon, Textarea } from '@chakra-ui/react';
-import './icon.css';
-import { ReactComponent as Bin } from './assets/bin.svg';
+import { Box, IconButton, Textarea } from '@chakra-ui/react';
 import { BinIcon } from './assets/icons.js';
 
-class TextAreaElem extends React.Component {
-    constructor(props){
-        super(props)
-        this.handelChangeList = this.handelChangeList.bind(this)
-        this.handleDeleteList = this.handleDeleteList.bind(this)
-    }
 
-    handelChangeList(event){
-        this.props.onChangeList(this.props.index, event.target.value)
-    }
+function TextAreaElem(props) {
 
-    handleDeleteList(){
-        this.props.onDeleteList(this.props.index)
-    }
+  const handelChangeList = (event) => props.onChangeList(props.index, event.target.value);
+  const handleDeleteList = () => props.onDeleteList(props.index);
 
-    render() {
-      const lineNum = this.props.text.split("\n").length; 
-      const textAreaFontSize = (lineNum < 10) ? 'md' : (lineNum < 11 ? 'sm' : 'xs')
-     
-        return (
-            <Box position='relative' w='20rem' minW='15rem' h='100%' overflowY='auto' >
-                <Textarea value={this.props.text} fontSize={textAreaFontSize} onChange={this.handelChangeList} resize='none' position="absolute" zIndex="0" h={"100%"} ></Textarea>
-                {this.props.listNumber > 1 && <IconButton onClick={this.handleDeleteList} className="deleteButton" position="absolute" top="1px" right='1px' zIndex="1" p="0" icon={<BinIcon boxSize="2rem"/>}/>}
-            </Box>
-        );
-    }
+  const lineNum = props.text.split("\n").length; 
+  const textAreaFontSize = (lineNum < 10) ? 'md' : (lineNum < 11 ? 'sm' : 'xs')
+  return (
+    <Box position='relative' w='20rem' minW='15rem' h='100%' overflowY='auto' >
+        <Textarea value={props.text} fontSize={textAreaFontSize} onChange={handelChangeList} resize='none' position="absolute" zIndex="0" h={"100%"} ></Textarea>
+        {props.listsNum > 1 && <IconButton onClick={handleDeleteList} className="deleteButton" position="absolute" top="1px" right='1px' zIndex="1" p="0" icon={<BinIcon boxSize="2rem"/>}/>}
+    </Box>
+  );
 }
-
-
  
 export default TextAreaElem;
