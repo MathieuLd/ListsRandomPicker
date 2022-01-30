@@ -54,7 +54,7 @@ function LoopGeneration(props){
           <IconButton className='loopButton' onClick={handleToggleLoop} onMouseEnter={handleHoverLoop} onMouseLeave={handleUnhoverLoop} icon={<LoopIcon className={iconState} boxSize="1.5rem"/>}/>
         </InputLeftAddon>
         <Input type='number' step='0.1' value={interval===0 ? '' : interval/1000} onChange={handleChangeInterval}></Input>
-        <InputRightAddon children='sec' bgColor='white'/>
+        <InputRightAddon children='sec' bgColor='inherit' borderColor="inherit" />
       </InputGroup>
       {isLooping && (showProgress && <InfiniteProgressBar duration={interval}/>)}
     </>

@@ -67,16 +67,15 @@ function App(){
   const urlCorrespondToState = () => areArrayEqual(getListsFromUrl(), lists)
 
   return (
-    <Container maxW='1500px' h='100vh' >
-        <Flex w='100%' h='100%' direction='column' p='1rem' gap='1rem'>
-          <Header/>
-          <TextAreaList lists={lists} onChangeList={handelChangeList} onAddList={handleAddList} onDeleteList={handleDeleteList} />
-          <GenerationTriggerer onGenerate={handleGeneration}/>
-          <Result result={result}/>
-        </Flex>
-    </Container>
+      <Container maxW='1500px' h='100vh' >
+          <Flex w='100%' h='100%' direction='column' p='1rem' gap='1rem'>
+            <Header/>
+            <TextAreaList lists={lists} onChangeList={handelChangeList} onAddList={handleAddList} onDeleteList={handleDeleteList} />
+            <GenerationTriggerer onGenerate={handleGeneration}/>
+            <Result result={result}/>
+          </Flex>
+      </Container>
   );
-
 }
 
 export default App;
