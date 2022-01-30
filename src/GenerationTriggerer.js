@@ -10,7 +10,7 @@ function GenerationTriggerer(props){
   return ( 
     <Flex gap="2">
       <Button onClick={handleGeneration}>Generate</Button>
-      <LoopGeneration onGenerate={handleGeneration}/>
+      <LoopGeneration onGenerate={handleGeneration} onIntervalChange={props.onIntervalChange} defaultInterval={props.defaultInterval}/>
     </Flex>
   );
 }

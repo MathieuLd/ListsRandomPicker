@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { InputGroup, InputLeftAddon, InputRightAddon, Input, IconButton } from '@chakra-ui/react';
 import { LoopIcon } from "./assets/icons.js"
 import InfiniteProgressBar from './InfiniteProgressBar'
+import { DEFAULT_INTERVAL } from './constants'
 
 
 function LoopGeneration(props){
@@ -14,7 +15,7 @@ function LoopGeneration(props){
   }
 
   const [isLooping, setIsLooping] = useState(false);
-  const [interval, setInterval] = useState(2000);
+  const [interval, setInterval] = useState(props.defaultInterval);
   const [showProgress, setShowProgress] = useState(true);
   const [iconState, setIconState] = useState(iconStates.default);
   const [looperId, setLooperId] = useState(null);
@@ -22,7 +23,7 @@ function LoopGeneration(props){
   const handleToggleLoop = () => {setIsLooping(prevIsLooping => !prevIsLooping)}
   useEffect(() => updateLooper(),[isLooping])
 
-  const handleChangeInterval = (event) => {setInterval(event.target.value * 1000); setShowProgress(false)}
+  const handleChangeInterval = (event) => {setInterval(event.target.value * 1000); props.onIntervalChange(event.target.value * 1000); setShowProgress(false)}
   useEffect(() => {updateLooper(); setShowProgress(true)},[interval])
   
   const handleHoverLoop = () => setIconState((isLooping ? iconStates.stoping : iconStates.defaultRotate))

@@ -4,6 +4,8 @@ import Header from './Header';
 import TextAreaList from './TextAreaList';
 import GenerationTriggerer from './GenerationTriggerer';
 import Result from './Result';
+import { DEFAULT_INTERVAL } from './constants'
+import CryptoJS from 'crypto-js'
 import './App.css';
 import './icon.css';
 
@@ -21,10 +23,29 @@ function App(){
     return (isJsonString(listsDecoded) ?  JSON.parse(listsDecoded) : [""])
   }
 
+  const getElementReducedHash = (elem) => CryptoJS.SHA256(JSON.stringify(elem)).toString().slice(0,10)
+  
+  const calculateDefaultInterval = () => localStorage.getItem("interval-"+getElementReducedHash(lists)) || DEFAULT_INTERVAL
+
+
   const [lists, setLists] = useState(getListsFromUrl());
   const [result, setResult] = useState("");
+  const [appInterval, setAppInterval] = useState(calculateDefaultInterval());
+
+  const areArrayEqual = (a,b) => JSON.stringify(a) === JSON.stringify(b);
+
+  const setLocalStorageInterval = () => {
+    let currentListsHahs = getElementReducedHash(lists);
+    if(appInterval == DEFAULT_INTERVAL){
+      localStorage.removeItem("interval-"+currentListsHahs)
+    }else{
+      if(!areArrayEqual(lists, [""])) localStorage.setItem("interval-" + currentListsHahs, appInterval)
+    }
+  }
 
   useEffect(() => generateResult(),[])
+  useEffect(() => setLocalStorageInterval(),[appInterval])
+
 
   const randomInt = (max) => Math.floor(Math.random() * max);
 
@@ -50,14 +71,16 @@ function App(){
 
   const handleDeleteList = (index) => setLists(prevLists => prevLists.filter((list,id) => index !== id))
 
-  const areArrayEqual = (a,b) => JSON.stringify(a) === JSON.stringify(b);
+
 
   const handleGeneration = () => {
+    setLocalStorageInterval()
     redirectIfNeeded()
     generateResult()
   }
 
   const redirectIfNeeded = () => {if(!urlCorrespondToState()) window.location.replace(stateToUrl())}
+
 
   const stateToUrl = () => {
     let listsToEncode = removeEmptyLists(lists)
@@ -71,7 +94,7 @@ function App(){
           <Flex w='100%' h='100%' direction='column' p='1rem' gap='1rem'>
             <Header/>
             <TextAreaList lists={lists} onChangeList={handelChangeList} onAddList={handleAddList} onDeleteList={handleDeleteList} />
-            <GenerationTriggerer onGenerate={handleGeneration}/>
+            <GenerationTriggerer onGenerate={handleGeneration} onIntervalChange={setAppInterval} defaultInterval={calculateDefaultInterval()}/>
             <Result result={result}/>
           </Flex>
       </Container>
