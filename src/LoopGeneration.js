@@ -8,6 +8,7 @@ function LoopGeneration(props){
 
   const iconStates = {
     default: "oneArrowLoop",
+    defaultRotate: "oneArrowLoop360",
     running: "twoArrowLoop",
     stoping: "twoArrowOut"
   }
@@ -24,7 +25,7 @@ function LoopGeneration(props){
   const handleChangeInterval = (event) => {setInterval(event.target.value * 1000); setShowProgress(false)}
   useEffect(() => {updateLooper(); setShowProgress(true)},[interval])
   
-  const handleHoverLoop = () => setIconState((isLooping ? iconStates.stoping : iconStates.running))
+  const handleHoverLoop = () => setIconState((isLooping ? iconStates.stoping : iconStates.defaultRotate))
 
   const handleUnhoverLoop = () => setIconState((isLooping ? iconStates.running : iconStates.default))
   

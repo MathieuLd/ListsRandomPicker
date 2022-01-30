@@ -1,42 +1,30 @@
-/* Loop Bin */
+/* Bin Icon */
 
 #lid, #container{
   transition: all 0.3s ease;
 }
 
+/* onHover */
 .deleteButton:hover #lid{
   transform: translate(0.2rem,-0.3rem) rotate(15deg);
 }
-
 .deleteButton:hover #container{
   transform: translate(-0.1rem,0.15rem) rotate(-7deg);
 }
 
 
 
-/* Loop Plus */
+/* Plus Icon */
 
 #horizontal, #vertical{
   transition: all 0.3s ease;
   transform-origin: center;
 }
 
-#horizontal{
-  transition: all 0.3s ease;
-  /* transform-origin: 100% 50%; */
-}
-
-.addButton:hover #horizontal{
-  transform: translate(0, 0) rotate(-33deg);
-
-}
-
-
-
+/* onHover */
 .addButton:hover #horizontal{
   transform: translateY(24%) rotate(-210deg);
 }
-
 .addButton:hover #vertical{
   transform: translateY(-24%) rotate(120deg);
 }
@@ -45,43 +33,48 @@
 
 /* Loop Icon */
 
-
 .loopButton #arcBottom,  .loopButton #arrowBottom, .loopButton #arcTop, .loopButton #arrowTop{
   transition: all 0.3s ease;
   transform-origin: center;
 }
 
-
+/* default: "oneArrowLoop" */
 .oneArrowLoop #arcBottom{
+  transform: rotate(270deg);
+}
+.oneArrowLoop #arrowBottom, .oneArrowLoop #arcTop{
+  transform: rotate(180deg);
+}
+.oneArrowLoop #arrowTop{
+  transform: rotate(360deg);
+}
+
+/* defaultRotate: "oneArrowLoop360" */
+.oneArrowLoop360 #arrowTop{
+  transform: rotate(0deg);
+}
+.oneArrowLoop360 #arcTop, .oneArrowLoop360 #arrowBottom {
+  transform: rotate(-180deg);
+}
+.oneArrowLoop360 #arcBottom{
   transform: rotate(-90deg);
 }
 
-.oneArrowLoop #arrowBottom, .oneArrowLoop #arcTop{
-  transform: rotate(-180deg);
-}
-
-.oneArrowLoop #arrowTop{
-  transform: rotate(0deg);
-}
-
-
-.twoArrowLoop #arcBottom, .twoArrowLoop #arrowBottom, .twoArrowLoop #arcTop, .twoArrowLoop #arrowTop{
+/* running: "twoArrowLoop" */
+.twoArrowLoop #arrowTop, .twoArrowLoop #arcTop, .twoArrowLoop #arrowBottom, .twoArrowLoop #arcBottom{
   transform: rotate(-360deg);
 }
 
-
-.twoArrowOut #arcBottom{
-  transform: rotate(10deg) translate(0%, -40%);;
+/* stoping: "twoArrowOut" */
+.twoArrowOut #arrowTop{
+  transform: rotate(10deg) translate(0%, 40%);
 }
-
-.twoArrowOut #arrowBottom{
-  transform: rotate(10deg) translate(0%, -40%);
-}
-
 .twoArrowOut #arcTop{
   transform: rotate(10deg) translate(0%, 40%);;
 }
-
-.twoArrowOut #arrowTop{
-  transform: rotate(10deg) translate(0%, 40%);
+.twoArrowOut #arrowBottom{
+  transform: rotate(10deg) translate(0%, -40%);
+}
+.twoArrowOut #arcBottom{
+  transform: rotate(10deg) translate(0%, -40%);;
 }
