@@ -1,21 +1,9 @@
-.progressbar {
-    width: 100px;
-    height: 10px;
-    border: solid 1px black;
-}
-
-.progressbar .inner {
-    width: 0px;
-    height: 10px;
-    background-color: rgb(0, 0, 0);
-}
-
 @keyframes progress {
     from{
-        width: 0px;
+        width: 0%;
     }
 
     to{
-        width: 100px;
+        width: 100%;
     }
 }
