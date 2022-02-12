@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { InputGroup, InputLeftAddon, InputRightAddon, Input, IconButton } from '@chakra-ui/react';
+import { InputGroup, InputLeftAddon, InputRightAddon, Input, IconButton,useColorMode } from '@chakra-ui/react';
 import { LoopIcon } from "./assets/icons.js"
 import InfiniteProgressBar from './InfiniteProgressBar'
 import { DEFAULT_INTERVAL } from './constants'
@@ -19,6 +19,7 @@ function LoopGeneration(props){
   const [showProgress, setShowProgress] = useState(true);
   const [iconState, setIconState] = useState(iconStates.default);
   const [looperId, setLooperId] = useState(null);
+  const {colorMode, toggleColorMode} = useColorMode();
 
   const handleToggleLoop = () => {setIsLooping(prevIsLooping => !prevIsLooping)}
   useEffect(() => updateLooper(),[isLooping])
@@ -51,8 +52,8 @@ function LoopGeneration(props){
   return ( 
     <>
       <InputGroup maxW='15rem'>
-        <InputLeftAddon p='0'>
-          <IconButton className='loopButton' onClick={handleToggleLoop} onMouseEnter={handleHoverLoop} onMouseLeave={handleUnhoverLoop} icon={<LoopIcon className={iconState} boxSize="1.5rem"/>}/>
+        <InputLeftAddon p='0' bgColor='inherit'>
+          <IconButton className='loopButton' borderRightRadius='0' sx={isLooping ? (colorMode == 'dark' ? {backgroundColor:'teal.600', '&:hover': {backgroundColor: 'teal.700'}} : {backgroundColor:'teal.200', '&:hover': {backgroundColor: 'teal.300'}} ) : {}} onClick={handleToggleLoop} onMouseEnter={handleHoverLoop} onMouseLeave={handleUnhoverLoop} icon={<LoopIcon className={iconState} boxSize="1.5rem"/>}/>
         </InputLeftAddon>
         <Input type='number' step='0.1' value={interval===0 ? '' : interval/1000} onChange={handleChangeInterval}></Input>
         <InputRightAddon children='sec' bgColor='inherit' borderColor='inherit' />
