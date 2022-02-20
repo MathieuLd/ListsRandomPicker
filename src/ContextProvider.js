@@ -3,6 +3,7 @@ import { DEFAULT_INTERVAL, areArrayEqual } from './utility'
 
 export const IntervalContext = createContext();
 export const SetIntervalContext = createContext();
+export const HandleGenerationLocalStorageContext = createContext();
 
 
 function ContextProvider(props){
@@ -19,12 +20,16 @@ function ContextProvider(props){
     }
   }
 
-  useEffect(() => setLocalStorageInterval(),[interval])
+  //useEffect(() => setLocalStorageInterval(),[interval])
+
+  const handleGenerationLocalStorage = () => {setLocalStorageInterval()}
   
   return(
     <IntervalContext.Provider value={interval}>
       <SetIntervalContext.Provider value={setInterval}>
-        {props.children}
+        <HandleGenerationLocalStorageContext.Provider value ={handleGenerationLocalStorage}>
+          {props.children}
+        </HandleGenerationLocalStorageContext.Provider>
       </SetIntervalContext.Provider>
     </IntervalContext.Provider>
   )

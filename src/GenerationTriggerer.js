@@ -1,11 +1,14 @@
-import React from 'react';
+import { useContext } from 'react';
 import { Flex, Button } from '@chakra-ui/react';
 import LoopGeneration from './LoopGeneration';
+import { HandleGenerationLocalStorageContext } from './ContextProvider'
 
 
 function GenerationTriggerer(props){
 
-  const handleGeneration = () => props.onGenerate()
+  const handleGenerationLocalStorage = useContext(HandleGenerationLocalStorageContext);
+
+  const handleGeneration = () => { handleGenerationLocalStorage(); props.onGenerate() }
 
   return ( 
     <Flex gap="2">
