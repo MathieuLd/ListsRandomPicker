@@ -1,3 +1,5 @@
+import CryptoJS from 'crypto-js'
+
 // Global constants
 export const DEFAULT_INTERVAL = 5000
 
@@ -10,3 +12,7 @@ export const isJsonString = (str) => {
 }
 
 export const randomInt = (max) => Math.floor(Math.random() * max);
+
+export const getJsObjectReducedHash = (elem) => CryptoJS.SHA256(JSON.stringify(elem)).toString().slice(0,10)
+
+export const removeEmptyStrFromArray = (array) => array.filter(elem => elem !== "")
