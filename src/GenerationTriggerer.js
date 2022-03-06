@@ -4,17 +4,14 @@ import LoopGeneration from './LoopGeneration';
 
 function GenerationTriggerer(props){
 
-  const handleGeneration = () => { props.handleGenerationLocalStorage(); props.onGenerate() }
-
   return ( 
     <Flex gap="2">
-      <Button onClick={handleGeneration}>Generate</Button>
+      <Button onClick={props.onGenerate}>Generate</Button>
       <LoopGeneration 
         onIntervalChange={props.onIntervalChange} 
-        interval={props.interval} setInterval={props.setInterval} 
-        isLooping={props.isLooping} setIsLooping={props.setIsLooping} 
-        updateWindowInterval={props.updateWindowInterval} 
-        setLocalStorageLoop={props.setLocalStorageLoop}
+        interval={props.interval} handleChangeInterval={props.handleChangeInterval}
+        isLooping={props.isLooping} handleToggleLoop={props.handleToggleLoop}
+        showProgress={props.showProgress}
       />
     </Flex>
   );

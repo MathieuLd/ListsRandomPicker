@@ -12,23 +12,18 @@ function LoopGeneration(props){
     stoping: "twoArrowOut"
   }
 
-  const [ showProgress, setShowProgress ] = useState(true);
   const [ iconState, setIconState ] = useState(iconStates.default);
   const { colorMode } = useColorMode();
 
-  const handleToggleLoop = () => {props.setLocalStorageLoop(!props.isLooping); props.setIsLooping(prevIsLooping => !prevIsLooping)}
-  
+  useEffect(() => {updateLooperIcon(true)},[props.interval])
 
-  const handleChangeInterval = (event) => {props.setInterval(event.target.value * 1000); setShowProgress(false)}
-  useEffect(() => {updateLooper(); setShowProgress(true)},[props.interval])
+  
   
   const handleHoverLoop = () => setIconState((props.isLooping ? iconStates.stoping : iconStates.defaultRotate))
 
   const handleUnhoverLoop = () => setIconState((props.isLooping ? iconStates.running : iconStates.default))
   
- 
-  const updateLooper = () => {
-    props.updateWindowInterval()
+  const updateLooperIcon = () => {
     if(props.isLooping){
       setIconState(iconStates.running);
     }else{
@@ -40,12 +35,12 @@ function LoopGeneration(props){
     <>
       <InputGroup maxW='15rem'>
         <InputLeftAddon p='0' bgColor='inherit'>
-          <IconButton className='loopButton' borderRightRadius='0' sx={props.isLooping ? (colorMode === 'dark' ? {backgroundColor:'teal.600', '&:hover': {backgroundColor: 'teal.700'}} : {backgroundColor:'teal.200', '&:hover': {backgroundColor: 'teal.300'}} ) : {}} onClick={handleToggleLoop} onMouseEnter={handleHoverLoop} onMouseLeave={handleUnhoverLoop} icon={<LoopIcon className={iconState} boxSize="1.5rem"/>}/>
+          <IconButton className='loopButton' borderRightRadius='0' sx={props.isLooping ? (colorMode === 'dark' ? {backgroundColor:'teal.600', '&:hover': {backgroundColor: 'teal.700'}} : {backgroundColor:'teal.200', '&:hover': {backgroundColor: 'teal.300'}} ) : {}} onClick={props.handleToggleLoop} onMouseEnter={handleHoverLoop} onMouseLeave={handleUnhoverLoop} icon={<LoopIcon className={iconState} boxSize="1.5rem"/>}/>
         </InputLeftAddon>
-        <Input type='number' step='0.1' value={props.interval===0 ? '' : props.interval/1000} onChange={handleChangeInterval}></Input>
+        <Input type='number' step='0.1' value={props.interval===0 ? '' : props.interval/1000} onChange={props.handleChangeInterval}></Input>
         <InputRightAddon children='sec' bgColor='inherit' borderColor='inherit' />
       </InputGroup>
-      {props.isLooping && (showProgress && <InfiniteProgressBar duration={props.interval}/>)}
+      {props.isLooping && (props.showProgress && <InfiniteProgressBar duration={props.interval}/>)}
     </>
   );
 }

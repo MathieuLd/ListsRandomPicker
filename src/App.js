@@ -4,7 +4,7 @@ import Header from './Header';
 import TextAreaList from './TextAreaList';
 import GenerationTriggerer from './GenerationTriggerer';
 import Result from './Result';
-import { DEFAULT_INTERVAL,areArrayEqual, randomInt, isJsonString, getJsObjectReducedHash, removeEmptyStrFromArray } from './utility'
+import { DEFAULT_INTERVAL, areArrayEqual, randomInt, isJsonString, getJsObjectReducedHash, removeEmptyStrFromArray } from './utility'
 
 import './App.css';
 import './icon.css';
@@ -22,13 +22,14 @@ function App(){
   const [ lists, setLists ] = useState(getListsFromUrl());
   const [ result, setResult ] = useState("");
   const [ interval, setInterval ] = useState(localStorage.getItem("interval-"+getJsObjectReducedHash(lists)) || DEFAULT_INTERVAL);
-  const [ isLooping, setIsLooping ] = useState(localStorage.getItem("isLooping-"+getJsObjectReducedHash(lists)) || false);
+  const [ isLooping, setIsLooping ] = useState(() => {console.log(localStorage.getItem("isLooping-"+getJsObjectReducedHash(lists)) || false);return localStorage.getItem("isLooping-"+getJsObjectReducedHash(lists)) || false});
   const [ looperId, setLooperId ] = useState(null);
+  const [ showProgress, setShowProgress ] = useState(true);
 
 
-  useEffect(() => generateResult(),[])
-  useEffect(() => updateWindowInterval(),[isLooping])
-  useEffect(() => updateWindowInterval(),[lists])
+  useEffect(() => {generateResult()},[])
+  useEffect(() => {updateWindowInterval()},[isLooping,lists,interval])
+  useEffect(() => {setShowProgress(true)},[lists,interval])
 
   const generateResult = () => {
     setResult(
@@ -41,8 +42,9 @@ function App(){
   }
 
   const handelChangeList = (index, listStr) => {
-    console.log("listabouttochange")
-    console.log(JSON.stringify(lists))
+    //console.log("listabouttochange")
+    //console.log(JSON.stringify(lists))
+    setShowProgress(false)
     setLists((pervLists) => pervLists.map((prevListStr,id) => {
       return id === index ? listStr : prevListStr
     }))
@@ -54,7 +56,7 @@ function App(){
 
 
   const updateWindowInterval= () => {
-    console.log("winInterval IsLoop :"+isLooping)
+    //console.trace("winInterval IsLoop :"+isLooping+' currentLoopid : '+looperId)
     if(isLooping){
       stopLooper()
       handleLoopedGeneration()
@@ -65,48 +67,49 @@ function App(){
   }
 
   const stopLooper = () => {
+    //console.log("stopLooper="+looperId)
     window.clearInterval(looperId)
     setLooperId(null);
   }
 
 
-  const setLocalStorageLoop = (toggledLoopState) => {
-    if(toggledLoopState){
-      localStorage.setItem("loopState-"+getJsObjectReducedHash(lists), interval)
+  const setLocalStorageLoop = (currentIsLooping) => {
+    if(currentIsLooping){
+      localStorage.setItem("isLooping-"+getJsObjectReducedHash(lists), currentIsLooping)
     }else{
-      localStorage.removeItem("loopState-"+getJsObjectReducedHash(lists))
+      localStorage.removeItem("isLooping-"+getJsObjectReducedHash(lists))
     }
   }
 
-  const setLocalStorageInterval = () => {
-    if(!interval === DEFAULT_INTERVAL){
-      if(!areArrayEqual(lists, [""])) localStorage.setItem("interval-"+getJsObjectReducedHash(lists), interval)
+  const setLocalStorageInterval = (currentInterval) => {
+    //console.trace("LSInterval :"+interval+"DEFAULT_INTERVAL :"+DEFAULT_INTERVAL+' LSCondition : '+(!(currentInterval == DEFAULT_INTERVAL)))
+    if(!(currentInterval === DEFAULT_INTERVAL)){
+      if(!areArrayEqual(lists, [""])) localStorage.setItem("interval-"+getJsObjectReducedHash(lists), currentInterval)
     }else{
       localStorage.removeItem("interval-"+getJsObjectReducedHash(lists))
     }
   }
 
+  const handleChangeInterval = (event) => {setLocalStorageInterval(event.target.value * 1000); setInterval(event.target.value * 1000); setShowProgress(false)}
 
-  const handleGenerationLocalStorage = () => {setLocalStorageInterval();}
 
   const handleGeneration = () => {
-    //setLocalStorageInterval()
-    console.log("gen")
-    console.log(JSON.stringify(lists))
+    setLocalStorageInterval(interval);
+    //console.log("gen")
+    //console.log(JSON.stringify(lists))
     redirectIfNeeded()
     generateResult()
   }
 
   const handleLoopedGeneration = () => {
-    //setLocalStorageInterval()
-    console.log("gen")
-    console.log(JSON.stringify(lists))
+    //console.log("loopid = "+looperId)
+    //console.log(JSON.stringify(lists))
     //redirectIfNeeded()
     generateResult()
   }
 
 
-  const redirectIfNeeded = () => {console.log(urlCorrespondToState()); if(!urlCorrespondToState()) window.location.replace(stateToUrl())}
+  const redirectIfNeeded = () => {if(!urlCorrespondToState()) window.location.replace(stateToUrl())}
 
 
   const stateToUrl = () => {
@@ -116,6 +119,8 @@ function App(){
 
   const urlCorrespondToState = () => areArrayEqual(getListsFromUrl(), lists)
 
+
+  const handleToggleLoop = () => {setLocalStorageLoop(!isLooping); setLocalStorageInterval(interval); redirectIfNeeded(); setIsLooping(prevIsLooping => !prevIsLooping)}
 
   return (
     <Container maxW='1500px' h='100vh' >
@@ -129,11 +134,9 @@ function App(){
           />
           <GenerationTriggerer 
             onGenerate={handleGeneration} 
-            interval={interval} setInterval={setInterval} 
-            isLooping={isLooping} setIsLooping={setIsLooping} 
-            updateWindowInterval={updateWindowInterval} 
-            setLocalStorageLoop={setLocalStorageLoop} 
-            handleGenerationLocalStorage={handleGenerationLocalStorage}
+            interval={interval} handleChangeInterval={handleChangeInterval} 
+            isLooping={isLooping} handleToggleLoop={handleToggleLoop}
+            showProgress={showProgress} setShowProgress={setShowProgress}
           />
           <Result result={result}/>
         </Flex>

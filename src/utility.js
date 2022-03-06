@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js'
 
 // Global constants
-export const DEFAULT_INTERVAL = 5000
+export const DEFAULT_INTERVAL = 5000;
 
 // Utility functions
 export const areArrayEqual = (a,b) => JSON.stringify(a) === JSON.stringify(b);
